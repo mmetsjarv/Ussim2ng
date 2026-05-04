@@ -8,8 +8,8 @@ white = (255, 255, 255)
 yellow = (255, 255, 102)
 black = (0, 0, 0)
 red = (213, 50, 80)
-green = (0, 255, 0)
-blue = (50, 153, 213)
+green = (0, 102, 51)
+taust = (153, 232, 158)
 
 dis_width = 1200
 dis_height = 800
@@ -94,7 +94,7 @@ def gameLoop():
             game_close = True
         x1 += x1_change
         y1 += y1_change
-        dis.fill(blue)
+        dis.fill(taust)
         pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
         snake_Head = []
         snake_Head.append(x1)
