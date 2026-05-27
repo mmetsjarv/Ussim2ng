@@ -10,16 +10,16 @@ red = (213, 50, 80)
 green = (0, 102, 51)
 taust = (153, 232, 158)
 
-dis_width = 1200
-dis_height = 800
+dis_width = 800
+dis_height = 600
 
 dis = pygame.display.set_mode((dis_width, dis_height))
 pygame.display.set_caption('Snake Game by Edureka - Metsjärv')
 
 clock = pygame.time.Clock()
 
-snake_block = 10
-snake_speed = 15
+snake_block = 20
+snake_speed = 10
 
 font_style = pygame.font.SysFont("Comic Sans MS", 25, bold=True)
 score_font = pygame.font.SysFont("Comic Sans MS", 35, bold=True)
@@ -53,14 +53,14 @@ def gameloop():
     snake_list = []
     length_of_snake = 1
 
-    foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
-    foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+    foodx = round(random.randrange(0, dis_width - snake_block) / 20.0) * 20.0
+    foody = round(random.randrange(0, dis_height - snake_block) / 20.0) * 20.0
 
     while not game_over:
 
         while game_close:
             dis.fill(green)
-            message("You Lost! Press C-Play Again or Q-Quit", red)
+            message("You lost! Press C-Play again or Q-Quit", red)
             your_score(length_of_snake - 1)
             pygame.display.update()
 
@@ -110,8 +110,8 @@ def gameloop():
         pygame.display.update()
 
         if x1 == foodx and y1 == foody:
-            foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
-            foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+            foodx = round(random.randrange(0, dis_width - snake_block) / 20.0) * 20.0
+            foody = round(random.randrange(0, dis_height - snake_block) / 20.0) * 20.0
             length_of_snake += 1
 
         clock.tick(snake_speed)
