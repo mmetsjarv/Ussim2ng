@@ -4,7 +4,6 @@ import pygame
 
 pygame.init()
 
-white = (255, 255, 255)
 black = (0, 0, 0)
 red = (213, 50, 80)
 green = (0, 102, 51)
@@ -53,15 +52,25 @@ def gameloop():
     snake_list = []
     length_of_snake = 1
 
-    foodx = round(random.randrange(0, dis_width - snake_block) / 20.0) * 20.0 #ussi toidu suurused?
+    foodx = round(random.randrange(0, dis_width - snake_block) / 20.0) * 20.0 # Ussi toidu suurused?
     foody = round(random.randrange(0, dis_height - snake_block) / 20.0) * 20.0
 
     while not game_over:
 
         while game_close:
-            dis.fill(green)
-            message("You lost! Press C-Play again or Q-Quit", red)
-            your_score(length_of_snake - 1)
+            dis.fill(taust)
+
+            # Kaotuse teade
+            message("You lost! Press C-Play again or Q-Quit", green)
+
+            # Skoori kuvamine
+            score_text = score_font.render(
+                "Your Score: " + str(length_of_snake - 1),
+                True,
+                green
+            )
+            dis.blit(score_text, [dis_width / 3, dis_height / 2])
+
             pygame.display.update()
 
             for event in pygame.event.get():
