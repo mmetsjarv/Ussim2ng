@@ -4,6 +4,10 @@ import pygame
 
 pygame.init()
 
+# Õuna pildi laadimine
+apple_img = pygame.image.load("oun.png")
+apple_img = pygame.transform.scale(apple_img, (20, 20))
+
 black = (0, 0, 0)
 red = (213, 50, 80)
 green = (0, 102, 51)
@@ -13,14 +17,14 @@ dis_width = 800
 dis_height = 600
 
 dis = pygame.display.set_mode((dis_width, dis_height))
-pygame.display.set_caption('Snake Game by Edureka - Metsjärv')
+pygame.display.set_caption('Ussimäng - Metsjärv')
 
 clock = pygame.time.Clock()
 
 snake_block = 20 #ussi suurus
 snake_speed = 10 #ussi kiirus
 
-font_style = pygame.font.SysFont("Comic Sans MS", 25, bold=True)
+font_style = pygame.font.SysFont("Comic Sans MS", 24, bold=True)
 score_font = pygame.font.SysFont("Comic Sans MS", 35, bold=True)
 
 
@@ -59,6 +63,9 @@ def gameloop():
 
         while game_close:
             dis.fill(taust)
+
+            # Toidu joonistamine
+            dis.blit(apple_img, (foodx, foody))
 
             # Kaotuse teade
             message("You lost! Press C-Play again or Q-Quit", green)
@@ -103,7 +110,7 @@ def gameloop():
         x1 += x1_change
         y1 += y1_change
         dis.fill(taust)
-        pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
+        dis.blit(apple_img, (foodx, foody))
         snake_head = [x1, y1]
         snake_list.append(snake_head)
         if len(snake_list) > length_of_snake:
