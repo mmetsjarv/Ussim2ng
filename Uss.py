@@ -1,22 +1,20 @@
 import random
 import pygame
 
-# --- Pygame algatamine ---
+# Pygame algatamine
 pygame.init()
 pygame.mixer.init()
 
 # Taustamuusika laadimine ja käivitamine
 pygame.mixer.music.load("Raining tacos.mp3")
-pygame.mixer.music.set_volume(0.9)      # heli tugevus (0.0 kuni 1.0)
+pygame.mixer.music.set_volume(0.9)      # heli tugevus
 pygame.mixer.music.play(-1)             # -1 = mängib lõputult
 
-# --- Piltide laadimine ---
+# Piltide laadimine
 apple_img = pygame.image.load("Apple.png")
 apple_img = pygame.transform.scale(apple_img, (20, 20))
-
 coin_img = pygame.image.load("Coin.png")
 coin_img = pygame.transform.scale(coin_img, (20, 20))
-
 snake_head_img = pygame.image.load("Head.png")
 snake_body_img = pygame.image.load("Body.png")
 snake_tail_img = pygame.image.load("Saba.png")
@@ -28,11 +26,11 @@ snake_body_img = pygame.transform.scale(snake_body_img, (20, 20))
 snake_tail_img = pygame.transform.scale(snake_tail_img, (20, 20))
 snake_corner_img = pygame.transform.scale(snake_corner_img, (20, 20))
 
-# --- Värvid ---
+# Värvid
 green = (0, 102, 51)
 taust = (153, 232, 158)
 
-# --- Ekraani mõõtmed ---
+# Ekraani mõõtmed
 dis_width = 800
 dis_height = 600
 
@@ -44,23 +42,23 @@ clock = pygame.time.Clock()
 
 # Ussi seaded
 snake_block = 20   # ühe ruudu suurus
-snake_speed = 10   # kiirus
+snake_speed = 10   # Ussi kiirus
 
 # Fondid (teksti jaoks)
 font_style = pygame.font.SysFont("Comic Sans MS", 24, bold=True)
 score_font = pygame.font.SysFont("Comic Sans MS", 35, bold=True)
 
-# --- Punktide kuvamine ---
+# Punktide kuvamine
 def your_score(score):
     value = score_font.render("Your Score: " + str(score), True, green)
     dis.blit(value, [0, 0])
 
-# --- Sõnumi kuvamine (nt "kaotasid") ---
+# Sõnumi kuvamine
 def message(msg, color):
     mesg = font_style.render(msg, True, color)
     dis.blit(mesg, [dis_width / 6, dis_height / 3])
 
-# --- Suuna arvutamine kahe punkti vahel ---
+# Suuna arvutamine kahe punkti vahel
 def get_direction(from_pos, to_pos):
     dx = to_pos[0] - from_pos[0]
     dy = to_pos[1] - from_pos[1]
@@ -73,15 +71,15 @@ def get_direction(from_pos, to_pos):
         return "DOWN"
     return "UP"
 
-# --- Suuna pööramine pildile ---
+# Suuna pööramine pildile
 def get_rotation(direction):
     return {"RIGHT": 0, "DOWN": 270, "LEFT": 180, "UP": 90}[direction]
 
-# --- Kas kehaosa on kurv ---
+# Kas kehaosa on kurviline
 def is_corner(dir_in, dir_out):
     return dir_in != dir_out
 
-# --- Kurvi õige pööramine ---
+# Kurvi õigeks pööramine
 def get_corner_rotation(dir_in, dir_out):
     combos = {
         ("RIGHT", "UP"): 270,
@@ -95,12 +93,12 @@ def get_corner_rotation(dir_in, dir_out):
     }
     return combos.get((dir_in, dir_out), 0)
 
-# --- Ussi joonistamine ---
+# Ussi joonistamine
 def our_snake(snake_list, direction="RIGHT"):
     if len(snake_list) == 0:
         return
 
-    # Kui ainult 1 osa, joonista pea
+    # Kui on ainult 1 osa ussist, joonista pea
     if len(snake_list) == 1:
         x, y = snake_list[0]
         angle = get_rotation(direction)
@@ -111,14 +109,14 @@ def our_snake(snake_list, direction="RIGHT"):
     for i, segment in enumerate(snake_list):
         x, y = segment
 
-        # Saba (esimene segment)
+        # Saba (esimene osa)
         if i == 0:
             direction = get_direction(snake_list[i], snake_list[i + 1])
             angle = get_rotation(direction)
             rotated = pygame.transform.rotate(snake_tail_img, angle)
             dis.blit(rotated, (x, y))
 
-        # Pea (viimane segment)
+        # Pea (viimane viimane)
         elif i == len(snake_list) - 1:
             direction = get_direction(snake_list[i - 1], snake_list[i])
             angle = get_rotation(direction)
@@ -130,7 +128,7 @@ def our_snake(snake_list, direction="RIGHT"):
             dir_in = get_direction(snake_list[i - 1], snake_list[i])
             dir_out = get_direction(snake_list[i], snake_list[i + 1])
 
-            # Kui kurv
+            # Kui on kurv
             if is_corner(dir_in, dir_out):
                 angle = get_corner_rotation(dir_in, dir_out)
                 rotated = pygame.transform.rotate(snake_corner_img, angle)
@@ -140,7 +138,7 @@ def our_snake(snake_list, direction="RIGHT"):
 
             dis.blit(rotated, (x, y))
 
-# --- Põhimäng ---
+# Põhimäng
 def gameloop():
     game_over = False
     game_close = False
@@ -183,7 +181,7 @@ def gameloop():
             coin_visible = False
             coin_timer = 0
 
-        # --- Kaotuse ekraan ---
+        # Kaotuse ekraan
         while game_close:
             dis.fill(taust)
 
@@ -208,7 +206,7 @@ def gameloop():
                     if event.key == pygame.K_r:
                         return gameloop()
 
-        # --- Sisendi kontroll ---
+        # Sisendi kontroll
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
@@ -227,11 +225,11 @@ def gameloop():
                     y1_change = snake_block
                     x1_change = 0
 
-        # --- Piiridest väljumine ---
+        # Piiridest väljumine
         if x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0:
             game_close = True
 
-        # Liikumine
+        # Ussi liikumine
         x1 += x1_change
         y1 += y1_change
 
@@ -273,7 +271,7 @@ def gameloop():
 
         pygame.display.update()
 
-        # --- Õuna söömine ---
+        # Õuna söömine
         if x1 == foodx and y1 == foody:
             while [foodx, foody] in snake_list:
                 foodx = random.randrange(0, dis_width - snake_block, snake_block)
@@ -281,7 +279,7 @@ def gameloop():
             length_of_snake += 1
             score += 1
 
-        # --- Mündi võtmine ---
+        # Mündi võtmine
         if coin_visible and x1 == coinx and y1 == coiny:
             score += 5
             length_of_snake += 1
@@ -293,6 +291,5 @@ def gameloop():
     pygame.mixer.music.stop()
     pygame.quit()
     quit()
-
-# Mängu käivitamine
+    
 gameloop()
