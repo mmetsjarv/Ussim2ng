@@ -1,12 +1,14 @@
 import random
-
 import pygame
 
 pygame.init()
 
 # Õuna pildi laadimine
-apple_img = pygame.image.load("oun.png")
+apple_img = pygame.image.load("Apple.png")
 apple_img = pygame.transform.scale(apple_img, (20, 20))
+
+coin_img = pygame.image.load("Coin.png")
+coin_img = pygame.transform.scale(coin_img, (20, 20))
 
 black = (0, 0, 0)
 red = (213, 50, 80)
@@ -55,27 +57,48 @@ def gameloop():
 
     snake_list = []
     length_of_snake = 1
+    score = 0
 
-    foodx = round(random.randrange(0, dis_width - snake_block) / 20.0) * 20.0 # Ussi toidu suurused?
-    foody = round(random.randrange(0, dis_height - snake_block) / 20.0) * 20.0
+    foodx = random.randrange(0, dis_width - snake_block, snake_block)
+    foody = random.randrange(0, dis_height - snake_block, snake_block)
+
+    coinx = random.randrange(0, dis_width - snake_block, snake_block)
+    coiny = random.randrange(0, dis_height - snake_block, snake_block)
+
+    coin_visible = False
+    coin_timer = 0
 
     while not game_over:
 
+        coin_timer += 1
+
+        if not coin_visible and coin_timer >= snake_speed * 10:
+            coinx = random.randrange(0, dis_width - snake_block, snake_block)
+            coiny = random.randrange(0, dis_height - snake_block, snake_block)
+            coin_visible = True
+            coin_timer = 0
+
+        if coin_visible and coin_timer >= snake_speed * 5:
+            coin_visible = False
+            coin_timer = 0
+
         while game_close:
             dis.fill(taust)
-
-            # Toidu joonistamine
             dis.blit(apple_img, (foodx, foody))
+
+            if coin_visible:
+                dis.blit(coin_img, (coinx, coiny))
 
             # Kaotuse teade
             message("You lost! Press C-Play again or Q-Quit", green)
 
             # Skoori kuvamine
             score_text = score_font.render(
-                "Your Score: " + str(length_of_snake - 1),
+                "Your Score: " + str(score),
                 True,
                 green
             )
+
             dis.blit(score_text, [dis_width / 3, dis_height / 2])
 
             pygame.display.update()
@@ -109,8 +132,13 @@ def gameloop():
             game_close = True
         x1 += x1_change
         y1 += y1_change
+
         dis.fill(taust)
         dis.blit(apple_img, (foodx, foody))
+
+        if coin_visible:
+            dis.blit(coin_img, (coinx, coiny))
+
         snake_head = [x1, y1]
         snake_list.append(snake_head)
         if len(snake_list) > length_of_snake:
@@ -121,14 +149,22 @@ def gameloop():
                 game_close = True
 
         our_snake(snake_block, snake_list)
-        your_score(length_of_snake - 1)
+        your_score(score)
 
         pygame.display.update()
 
         if x1 == foodx and y1 == foody:
-            foodx = round(random.randrange(0, dis_width - snake_block) / 20.0) * 20.0  #ussi toidu suurused?
-            foody = round(random.randrange(0, dis_height - snake_block) / 20.0) * 20.0
+            foodx = random.randrange(0, dis_width - snake_block, snake_block)
+            foody = random.randrange(0, dis_height - snake_block, snake_block)
             length_of_snake += 1
+            score += 1
+
+        if coin_visible and x1 == coinx and y1 == coiny:
+            score += 5  # +5 punkti
+            length_of_snake += 1  # uss kasvab ühe võrra
+
+            coin_visible = False
+            coin_timer = 0
 
         clock.tick(snake_speed)
 
